@@ -12,21 +12,46 @@ logger = logging.getLogger(__name__)
 from page_loader.scripts.utils import (
     make_slug_from_url,
     make_dir_name,
-    make_file_name
+    make_file_name,
+    is_absolute_url
 )
 
 
-def download_image(url, path):
-    logger.info(f"Downloading image: {url}")
+def download_resource(url, path):
+    logger.info(f"Downloading resource: {url}")
     response = requests.get(url)
     response.raise_for_status()
     with open(path, 'wb') as f:
         f.write(response.content)
-    logger.info(f"Image saved: {path}")
+    logger.info(f"Resource saved: {path}")
+
+
+def download_all_resources(resources_tags, url, resourses_dir_path, dirname, tag, target_host):
+    for resources_tag in resources_tags:
+        src = resources_tag.get(tag)
+        if not src:
+            continue
+        if is_absolute_url(src) and target_host != urlparse(src).netloc:
+            continue
+
+        resource_url = urljoin(url, src)
+        parsed_resource_url = urlparse(resource_url)
+        resource_path, ext = os.path.splitext(parsed_resource_url.path)
+        ext = ext.lower()[1:]
+
+        resource_slug = make_slug_from_url(parsed_resource_url.netloc + resource_path)
+        resource_filename = make_file_name(resource_slug, ext)
+        resource_filepath = os.path.join(resourses_dir_path, resource_filename)
+
+        try:
+            download_resource(resource_url, resource_filepath)
+            resources_tag[tag] = f"{dirname}/{resource_filename}"
+        except Exception as e:
+            logger.warning(f"Error while downloading resource {resource_filename}: {e}")
 
 
 def download_page(url, output_dir=None):
-    logger.info("Startind downloading")
+    logger.info("Starting downloading")
     if not output_dir:
         output_dir = os.getcwd()
 
@@ -43,29 +68,13 @@ def download_page(url, output_dir=None):
 
     html_page = BeautifulSoup(response.text, 'html.parser')
     images_tags = html_page.find_all('img')
+    links_tags = html_page.find_all('link')
+    scripts_tags = html_page.find_all('script')
+    target_host = urlparse(url).netloc
 
-    for images_tag in images_tags:
-        src = images_tag.get('src')
-        if not src:
-            continue
-
-        image_url = urljoin(url, src)
-        parsed_image_url = urlparse(image_url)
-        image_path, ext = os.path.splitext(parsed_image_url.path)
-        ext = (
-            ext.lower()[1:]
-            if ext.lower()[1:] in ['jpg', 'jpeg', 'png']
-            else 'png'
-        )
-        image_slug = make_slug_from_url(parsed_image_url.netloc + image_path)
-        image_filename = make_file_name(image_slug, ext)
-        image_filepath = os.path.join(resourses_dir_path, image_filename)
-
-        try:
-            download_image(image_url, image_filepath)
-            images_tag['src'] = f"{dirname}/{image_filename}"
-        except Exception as e:
-            logger.warning(f"Error while downloading image {image_filename}: {e}")
+    download_all_resources(images_tags, url, resourses_dir_path, dirname, 'src', target_host)
+    download_all_resources(links_tags, url, resourses_dir_path, dirname, 'href', target_host)
+    download_all_resources(scripts_tags, url, resourses_dir_path, dirname, 'src', target_host)
 
     with open(file_path, 'w', encoding='utf-8') as f:
         f.write(html_page.prettify())
