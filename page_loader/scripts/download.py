@@ -51,7 +51,7 @@ def download_all_resources(resources_tags, url, resourses_dir_path, dirname, tag
 
 
 def download_page(url, output_dir=None):
-    logger.info("Starting downloading")
+    logger.info("Starting downloading page")
     if not output_dir:
         output_dir = os.getcwd()
 
@@ -72,9 +72,15 @@ def download_page(url, output_dir=None):
     scripts_tags = html_page.find_all('script')
     target_host = urlparse(url).netloc
 
+    logger.info("Starting downloading all images")
     download_all_resources(images_tags, url, resourses_dir_path, dirname, 'src', target_host)
+    logger.info("Images were downloaded")
+    logger.info("Starting downloading all links")
     download_all_resources(links_tags, url, resourses_dir_path, dirname, 'href', target_host)
+    logger.info("Links were downloaded")
+    logger.info("Starting downloading all scripts")
     download_all_resources(scripts_tags, url, resourses_dir_path, dirname, 'src', target_host)
+    logger.info("Scripts were downloaded")
 
     with open(file_path, 'w', encoding='utf-8') as f:
         f.write(html_page.prettify())
