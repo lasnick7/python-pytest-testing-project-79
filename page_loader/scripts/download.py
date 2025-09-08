@@ -52,6 +52,7 @@ def download_all_resources(resources_tags, url, resourses_dir_path, dirname, tag
 
 def download_page(url, output_dir=None):
     logger.info("Starting downloading page")
+
     if not output_dir:
         output_dir = os.getcwd()
 

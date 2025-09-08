@@ -17,6 +17,8 @@ def main():
     args = parser.parse_args()
     url = args.url
     path = args.output
+    filepath = download_page(url, path)
+    print(filepath)
 
 if __name__ == "__main__":
     main()

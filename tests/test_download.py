@@ -1,6 +1,8 @@
 import os
 
 import pytest
+import requests.exceptions
+
 from page_loader import download
 import requests_mock
 from pathlib import Path
@@ -112,3 +114,21 @@ def test_download_with_resources(example_dir, example_url):
             assert expected_script_src in html
             assert other_host_link_href in html
             assert other_host_script_src in html
+
+
+@pytest.mark.parametrize('status_code', [404, 500])
+def test_status_code_errors(example_dir, status_code, example_url):
+    with requests_mock.Mocker() as m:
+        m.get(example_url, status_code=status_code)
+        with pytest.raises(requests.exceptions.HTTPError):
+            download(example_url, example_dir)
+
+
+@pytest.mark.parametrize('wrong_path, exception', [
+    (1, TypeError),
+])
+def test_path_errors(wrong_path, exception, example_url, example_dir):
+    with requests_mock.Mocker() as m:
+        m.get(example_url, text='<html>example</html>')
+        with pytest.raises(exception):
+            download(example_url, wrong_path)
