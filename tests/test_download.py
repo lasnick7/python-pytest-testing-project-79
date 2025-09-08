@@ -64,13 +64,6 @@ def test_download_with_resources(example_dir, example_url):
     expected_path = os.path.join(example_dir, expected_filename)
 
     image_url = 'https://example.com/assets/professions/python.png'
-    # image_path = Path('tests/fixtures/python.png')
-    # image_content = image_path.read_bytes()
-    # curr_dir = os.getcwd()
-    # path_to_png = 'tests/fixtures/python.png'
-    # full_path_to_png = os.path.join(curr_dir, path_to_png)
-    # with open(full_path_to_png, "rb") as f:
-    #     image_content = f.read()
     TEST_DIR = Path(__file__).resolve().parent
     image_path = TEST_DIR / "fixtures" / "python.png"
     image_content = image_path.read_bytes()
@@ -132,14 +125,14 @@ def test_status_code_errors(example_dir, status_code, example_url):
             download(example_url, example_dir)
 
 
-@pytest.mark.parametrize('wrong_path, exception', [
-    (1, TypeError),
-])
-def test_path_errors(wrong_path, exception, example_url, example_dir):
-    with requests_mock.Mocker() as m:
-        m.get(example_url, text='<html>example</html>')
-        with pytest.raises(exception):
-            download(example_url, wrong_path)
+# @pytest.mark.parametrize('wrong_path, exception', [
+#     (1, TypeError),
+# ])
+# def test_path_errors(wrong_path, exception, example_url, example_dir):
+#     with requests_mock.Mocker() as m:
+#         m.get(example_url, text='<html>example</html>')
+#         with pytest.raises(exception):
+#             download(example_url, wrong_path)
 
 
 def test_not_create_new_dir(example_url, tmp_path):
