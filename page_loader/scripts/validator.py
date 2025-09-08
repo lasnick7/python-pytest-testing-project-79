@@ -18,6 +18,6 @@ def validate_path(output_dir):
         logger.error(f"Not a directory: {output_dir}")
         raise NotADirectoryError
 
-    if not os.access(output_dir):
+    if not os.access(output_dir, os.W_OK | os.X_OK):
         logger.error(f"No write permission for: {output_dir}")
         raise PermissionError
