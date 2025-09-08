@@ -38,6 +38,10 @@ def download_all_resources(resources_tags, url, resourses_dir_path, dirname, tag
         parsed_resource_url = urlparse(resource_url)
         resource_path, ext = os.path.splitext(parsed_resource_url.path)
         ext = ext.lower()[1:]
+        logger.info("LOGGING FOR EXTENTION")
+        logger.info(f"URL {resource_url}")
+        logger.info(f"PATH {resource_path}, EXT {ext}")
+
 
         resource_slug = make_slug_from_url(parsed_resource_url.netloc + resource_path)
         resource_filename = make_file_name(resource_slug, ext)
