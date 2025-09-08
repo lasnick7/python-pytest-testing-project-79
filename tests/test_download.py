@@ -142,9 +142,9 @@ def test_path_errors(wrong_path, exception, example_url, example_dir):
             download(example_url, wrong_path)
 
 
-def not_create_new_dir(example_dir, example_url):
-    missing = example_dir / 'missing' / 'dir'
+def test_not_create_new_dir(example_url, tmp_path):
+    missing = tmp_path / 'missing'
     assert not missing.exists()
     with pytest.raises((FileNotFoundError, NotADirectoryError, PermissionError, TypeError)):
-        download(example_url, str(missing))
-    assert not (example_dir / 'missing').exists()
+        download(example_url, missing)
+    assert not missing.exists()
