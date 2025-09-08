@@ -66,11 +66,14 @@ def test_download_with_resources(example_dir, example_url):
     image_url = 'https://example.com/assets/professions/python.png'
     # image_path = Path('tests/fixtures/python.png')
     # image_content = image_path.read_bytes()
-    curr_dir = os.getcwd()
-    path_to_png = 'tests/fixtures/python.png'
-    full_path_to_png = os.path.join(curr_dir, path_to_png)
-    with open(full_path_to_png, "rb") as f:
-        image_content = f.read()
+    # curr_dir = os.getcwd()
+    # path_to_png = 'tests/fixtures/python.png'
+    # full_path_to_png = os.path.join(curr_dir, path_to_png)
+    # with open(full_path_to_png, "rb") as f:
+    #     image_content = f.read()
+    TEST_DIR = Path(__file__).resolve().parent
+    image_path = TEST_DIR / "fixtures" / "python.png"
+    image_content = image_path.read_bytes()
     expected_image_filename = 'example-com-assets-professions-python.png'
 
     link_url = 'https://example.com/assets/application.css'
