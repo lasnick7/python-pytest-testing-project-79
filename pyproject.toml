@@ -17,5 +17,8 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["page_loader"]
 
+[tool.hatch.build.targets.wheel.force-include]
+"tests/fixtures" = "tests/fixtures"
+
 [project.scripts]
 page-loader = "page_loader.scripts.page_loader:main"

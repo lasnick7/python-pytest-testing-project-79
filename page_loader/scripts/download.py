@@ -38,7 +38,7 @@ def download_all_resources(resources_tags, url, resourses_dir_path, dirname, att
         parsed_resource_url = urlparse(resource_url)
         resource_path, ext = os.path.splitext(parsed_resource_url.path)
 
-        logger.debug(f"{ext}, {not ext}, {tag}")
+        # logger.debug(f"{ext}, {not ext}, {tag}")
 
         if not ext:
             if tag == 'img':
@@ -52,9 +52,9 @@ def download_all_resources(resources_tags, url, resourses_dir_path, dirname, att
         else:
             ext = ext.lower()[1:]
 
-        logger.info("LOGGING FOR EXTENSION")
-        logger.info(f"URL {resource_url}")
-        logger.info(f"PATH {resource_path}, EXT {ext}")
+        # logger.info("LOGGING FOR EXTENSION")
+        # logger.info(f"URL {resource_url}")
+        # logger.info(f"PATH {resource_path}, EXT {ext}")
 
 
         resource_slug = make_slug_from_url(parsed_resource_url.netloc + resource_path)
@@ -100,7 +100,7 @@ def download_page(url, output_dir=None):
     download_all_resources(links_tags, url, resourses_dir_path, dirname, 'href', target_host, 'link')
     logger.info("Links were downloaded")
     logger.info("Starting downloading all scripts")
-    download_all_resources(scripts_tags, url, resourses_dir_path, dirname, 'src', target_host, 'link')
+    download_all_resources(scripts_tags, url, resourses_dir_path, dirname, 'src', target_host, 'script')
     logger.info("Scripts were downloaded")
 
     with open(file_path, 'w', encoding='utf-8') as f:
