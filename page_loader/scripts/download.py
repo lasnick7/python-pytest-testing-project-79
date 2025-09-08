@@ -4,10 +4,6 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
 
-
-logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
-logger = logging.getLogger(__name__)
-
 from page_loader.scripts.validator import validate_path
 from page_loader.scripts.utils import (
     make_slug_from_url,
@@ -15,6 +11,9 @@ from page_loader.scripts.utils import (
     make_file_name,
     is_absolute_url
 )
+
+logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
+logger = logging.getLogger(__name__)
 
 
 def download_resource(url, path):

@@ -108,8 +108,8 @@ def test_download_with_resources(example_dir, example_url):
             expected_image_src = f'src="{expected_dirname}/{expected_image_filename}"'
             expected_link_href = f'href="{expected_dirname}/{expected_link_filename}"'
             expected_script_src = f'src="{expected_dirname}/{expected_script_filename}"'
-            other_host_link_href = f'href="https://cdn2.hexlet.io/assets/menu.css"'
-            other_host_script_src = f'src="https://js.stripe.com/v3/"'
+            other_host_link_href = 'href="https://cdn2.hexlet.io/assets/menu.css"'
+            other_host_script_src = 'src="https://js.stripe.com/v3/"'
             assert expected_image_src in html
             assert expected_link_href in html
             assert expected_script_src in html
@@ -123,16 +123,6 @@ def test_status_code_errors(example_dir, status_code, example_url):
         m.get(example_url, status_code=status_code)
         with pytest.raises(requests.exceptions.HTTPError):
             download(example_url, example_dir)
-
-
-# @pytest.mark.parametrize('wrong_path, exception', [
-#     (1, TypeError),
-# ])
-# def test_path_errors(wrong_path, exception, example_url, example_dir):
-#     with requests_mock.Mocker() as m:
-#         m.get(example_url, text='<html>example</html>')
-#         with pytest.raises(exception):
-#             download(example_url, wrong_path)
 
 
 def test_not_create_new_dir(example_url, tmp_path):
