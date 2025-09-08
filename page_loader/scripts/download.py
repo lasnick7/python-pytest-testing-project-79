@@ -8,7 +8,7 @@ from urllib.parse import urljoin, urlparse
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
 
-
+from page_loader.scripts.validator import validate_path
 from page_loader.scripts.utils import (
     make_slug_from_url,
     make_dir_name,
@@ -55,6 +55,8 @@ def download_page(url, output_dir=None):
 
     if not output_dir:
         output_dir = os.getcwd()
+
+    validate_path(output_dir)
 
     response = requests.get(url)
     response.raise_for_status()
