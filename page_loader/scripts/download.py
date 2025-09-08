@@ -37,16 +37,22 @@ def download_all_resources(resources_tags, url, resourses_dir_path, dirname, tag
         resource_url = urljoin(url, src)
         parsed_resource_url = urlparse(resource_url)
         resource_path, ext = os.path.splitext(parsed_resource_url.path)
+
+        logger.debug(f"{ext}, {not ext}, {tag}")
+
         if not ext:
             if tag == 'img':
                 ext = 'jpg'
+
             if tag == 'link':
                 ext = 'html'
+
             if tag == 'script':
                 ext = 'js'
         else:
             ext = ext.lower()[1:]
-        logger.info("LOGGING FOR EXTENTION")
+
+        logger.info("LOGGING FOR EXTENSION")
         logger.info(f"URL {resource_url}")
         logger.info(f"PATH {resource_path}, EXT {ext}")
 
