@@ -79,9 +79,9 @@ def test_download_with_resources(example_dir, example_url):
     script_content = '''console.log("example script")'''
     expected_script_filename = 'example-com-packs-js-runtime.js'
 
-    expected_image_path = os.path.join(example_dir, expected_dirname, expected_image_filename)
-    expected_link_path = os.path.join(example_dir, expected_dirname, expected_link_filename)
-    expected_script_path = os.path.join(example_dir, expected_dirname, expected_script_filename)
+    expected_image_path = os.path.join(example_dir, expected_dirname, expected_image_filename)  # noqa: E501
+    expected_link_path = os.path.join(example_dir, expected_dirname, expected_link_filename)  # noqa: E501
+    expected_script_path = os.path.join(example_dir, expected_dirname, expected_script_filename)  # noqa: E501
 
     with requests_mock.Mocker() as m:
         m.get(example_url, text=html_content)
@@ -105,9 +105,9 @@ def test_download_with_resources(example_dir, example_url):
 
         with open(filepath, encoding='utf-8') as file:
             html = file.read()
-            expected_image_src = f'src="{expected_dirname}/{expected_image_filename}"'
-            expected_link_href = f'href="{expected_dirname}/{expected_link_filename}"'
-            expected_script_src = f'src="{expected_dirname}/{expected_script_filename}"'
+            expected_image_src = f'src="{expected_dirname}/{expected_image_filename}"'  # noqa: E501
+            expected_link_href = f'href="{expected_dirname}/{expected_link_filename}"'  # noqa: E501
+            expected_script_src = f'src="{expected_dirname}/{expected_script_filename}"'  # noqa: E501
             other_host_link_href = 'href="https://cdn2.hexlet.io/assets/menu.css"'
             other_host_script_src = 'src="https://js.stripe.com/v3/"'
             assert expected_image_src in html
@@ -128,6 +128,6 @@ def test_status_code_errors(example_dir, status_code, example_url):
 def test_not_create_new_dir(example_url, tmp_path):
     missing = tmp_path / 'missing'
     assert not missing.exists()
-    with pytest.raises((FileNotFoundError, NotADirectoryError, PermissionError, TypeError)):
+    with pytest.raises((FileNotFoundError, NotADirectoryError, PermissionError, TypeError)):  # noqa: E501
         download(example_url, missing)
     assert not missing.exists()

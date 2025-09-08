@@ -25,7 +25,7 @@ def download_resource(url, path):
     logger.info(f"Resource saved: {path}")
 
 
-def download_all_resources(resources_tags, url, resourses_dir_path, dirname, attr, target_host, tag):
+def download_all_resources(resources_tags, url, resourses_dir_path, dirname, attr, target_host, tag):  # noqa: E501
     for resources_tag in resources_tags:
         src = resources_tag.get(attr)
         if not src:
@@ -56,7 +56,7 @@ def download_all_resources(resources_tags, url, resourses_dir_path, dirname, att
         # logger.info(f"PATH {resource_path}, EXT {ext}")
 
 
-        resource_slug = make_slug_from_url(parsed_resource_url.netloc + resource_path)
+        resource_slug = make_slug_from_url(parsed_resource_url.netloc + resource_path)  # noqa: E501
         resource_filename = make_file_name(resource_slug, ext)
         resource_filepath = os.path.join(resourses_dir_path, resource_filename)
 
@@ -64,7 +64,7 @@ def download_all_resources(resources_tags, url, resourses_dir_path, dirname, att
             download_resource(resource_url, resource_filepath)
             resources_tag[attr] = f"{dirname}/{resource_filename}"
         except Exception as e:
-            logger.warning(f"Error while downloading resource {resource_filename}: {e}")
+            logger.warning(f"Error while downloading resource {resource_filename}: {e}")  # noqa: E501
 
 
 def download_page(url, output_dir=None):
@@ -93,13 +93,13 @@ def download_page(url, output_dir=None):
     target_host = urlparse(url).netloc
 
     logger.info("Starting downloading all images")
-    download_all_resources(images_tags, url, resourses_dir_path, dirname, 'src', target_host, 'img')
+    download_all_resources(images_tags, url, resourses_dir_path, dirname, 'src', target_host, 'img')  # noqa: E501
     logger.info("Images were downloaded")
     logger.info("Starting downloading all links")
-    download_all_resources(links_tags, url, resourses_dir_path, dirname, 'href', target_host, 'link')
+    download_all_resources(links_tags, url, resourses_dir_path, dirname, 'href', target_host, 'link')  # noqa: E501
     logger.info("Links were downloaded")
     logger.info("Starting downloading all scripts")
-    download_all_resources(scripts_tags, url, resourses_dir_path, dirname, 'src', target_host, 'script')
+    download_all_resources(scripts_tags, url, resourses_dir_path, dirname, 'src', target_host, 'script')  # noqa: E501
     logger.info("Scripts were downloaded")
 
     with open(file_path, 'w', encoding='utf-8') as f:
