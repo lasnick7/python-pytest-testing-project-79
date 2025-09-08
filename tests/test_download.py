@@ -140,3 +140,11 @@ def test_path_errors(wrong_path, exception, example_url, example_dir):
         m.get(example_url, text='<html>example</html>')
         with pytest.raises(exception):
             download(example_url, wrong_path)
+
+
+def not_create_new_dir(example_dir, example_url):
+    missing = example_dir / 'missing' / 'dir'
+    assert not missing.exists()
+    with pytest.raises((FileNotFoundError, NotADirectoryError, PermissionError, TypeError)):
+        download(example_url, str(missing))
+    assert not (example_dir / 'missing').exists()
