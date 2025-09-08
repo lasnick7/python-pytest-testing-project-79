@@ -26,9 +26,9 @@ def download_resource(url, path):
     logger.info(f"Resource saved: {path}")
 
 
-def download_all_resources(resources_tags, url, resourses_dir_path, dirname, tag, target_host):
+def download_all_resources(resources_tags, url, resourses_dir_path, dirname, attr, target_host, tag):
     for resources_tag in resources_tags:
-        src = resources_tag.get(tag)
+        src = resources_tag.get(attr)
         if not src:
             continue
         if is_absolute_url(src) and target_host != urlparse(src).netloc:
@@ -63,7 +63,7 @@ def download_all_resources(resources_tags, url, resourses_dir_path, dirname, tag
 
         try:
             download_resource(resource_url, resource_filepath)
-            resources_tag[tag] = f"{dirname}/{resource_filename}"
+            resources_tag[attr] = f"{dirname}/{resource_filename}"
         except Exception as e:
             logger.warning(f"Error while downloading resource {resource_filename}: {e}")
 
@@ -94,13 +94,13 @@ def download_page(url, output_dir=None):
     target_host = urlparse(url).netloc
 
     logger.info("Starting downloading all images")
-    download_all_resources(images_tags, url, resourses_dir_path, dirname, 'src', target_host)
+    download_all_resources(images_tags, url, resourses_dir_path, dirname, 'src', target_host, 'img')
     logger.info("Images were downloaded")
     logger.info("Starting downloading all links")
-    download_all_resources(links_tags, url, resourses_dir_path, dirname, 'href', target_host)
+    download_all_resources(links_tags, url, resourses_dir_path, dirname, 'href', target_host, 'link')
     logger.info("Links were downloaded")
     logger.info("Starting downloading all scripts")
-    download_all_resources(scripts_tags, url, resourses_dir_path, dirname, 'src', target_host)
+    download_all_resources(scripts_tags, url, resourses_dir_path, dirname, 'src', target_host, 'link')
     logger.info("Scripts were downloaded")
 
     with open(file_path, 'w', encoding='utf-8') as f:
